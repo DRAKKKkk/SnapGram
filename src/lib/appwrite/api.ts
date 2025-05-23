@@ -20,13 +20,15 @@ export async function createUserAccount(user: INewUser) {
     if (!newAccount) throw Error;
 
     const avatarUrl = avatars.getInitials(user.name);
+    // Convert URL to string if necessary
+    const avatarUrlString = typeof avatarUrl === "string" ? avatarUrl : avatarUrl.toString();
 
     const newUser = await saveUserToDB({
       accountId: newAccount.$id,
       name: newAccount.name,
       email: newAccount.email,
       username: user.username,
-      imageUrl: avatarUrl,
+      imageUrl: avatarUrlString,
     });
 
     return newUser;
@@ -41,7 +43,8 @@ export async function saveUserToDB(user: {
   accountId: string;
   email: string;
   name: string;
-  imageUrl: URL;
+  // imageUrl: URL;
+  imageUrl: string;
   username?: string;
 }) {
   try {
@@ -121,12 +124,13 @@ export async function signOutAccount() {
 export async function createPost(post: INewPost) {
   try {
     // Upload file to appwrite storage
-    const uploadedFile = await uploadFile(post.file[0]);
+    const uploadedFile =  await uploadFile(post.file[0]);
 
     if (!uploadedFile) throw Error;
 
     // Get file url
-    const fileUrl = getFilePreview(uploadedFile.$id);
+    const fileUrl = getFileViewUrl(uploadedFile.$id);
+    console.log(post.file[0]);
     if (!fileUrl) {
       await deleteFile(uploadedFile.$id);
       throw Error;
@@ -177,23 +181,27 @@ export async function uploadFile(file: File) {
 }
 
 // ============================== GET FILE URL
-export function getFilePreview(fileId: string) {
-  try {
-    const fileUrl = storage.getFilePreview(
-      appwriteConfig.storageId,
-      fileId,
-      2000,
-      2000,
-      "top",
-      100
-    );
+// export function getFileViewUrl(fileId: string) {
+//   try {
+//     const fileUrl = storage.getFileViewUrl(
+//       appwriteConfig.storageId,
+//       fileId,
+//       2000,
+//       2000,
+//       "top",
+//       100
+//     );
 
-    if (!fileUrl) throw Error;
+//     if (!fileUrl) throw Error;
 
-    return fileUrl;
-  } catch (error) {
-    console.log(error);
-  }
+//     return fileUrl;
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+export function getFileViewUrl(fileId: string) {
+  return `${appwriteConfig.url}/storage/buckets/${appwriteConfig.storageId}/files/${fileId}/view?project=${appwriteConfig.projectId}`;
 }
 
 // ============================== DELETE FILE
@@ -281,13 +289,14 @@ export async function updatePost(post: IUpdatePost) {
       if (!uploadedFile) throw Error;
 
       // Get new file url
-      const fileUrl = getFilePreview(uploadedFile.$id);
+      const fileUrl = getFileViewUrl(uploadedFile.$id);
       if (!fileUrl) {
         await deleteFile(uploadedFile.$id);
         throw Error;
       }
 
-      image = { ...image, imageUrl: fileUrl, imageId: uploadedFile.$id };
+      // fileUrl is always a string
+      image = { ...image, imageUrl: new URL(fileUrl), imageId: uploadedFile.$id };
     }
 
     // Convert tags into array
@@ -502,7 +511,7 @@ export async function updateUser(user: IUpdateUser) {
       if (!uploadedFile) throw Error;
 
       // Get new file url
-      const fileUrl = getFilePreview(uploadedFile.$id);
+      const fileUrl = getFileViewUrl(uploadedFile.$id);
       if (!fileUrl) {
         await deleteFile(uploadedFile.$id);
         throw Error;
