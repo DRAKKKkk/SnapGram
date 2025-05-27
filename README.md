@@ -1,6 +1,6 @@
 # SnapGram - Social Media Platform
 
-![Project Banner](https://placehold.co/1200x400?text=SnapGram+Social+Media+App)
+![Project Banner](./public/assets/images/login-shot.png)
 
 <div align="center">
   <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React" />
