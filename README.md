@@ -67,10 +67,12 @@ Contributions are welcome! Please open an issue or submit a pull request.
 📄 License
 This project is licensed under the MIT License.
 
-📧 Contact
-Your Name - your.email@example.com
+🤝 Connect
+Have questions about the implementation? Feel free to reach out!
 
-Project Link: https://github.com/your-username/snapgram
+LinkedIn - https://www.linkedin.com/in/tejas-raj-09aa4a236/
+Email - rajtejas.xyz@gmail.com
+PortFolio - https://portfolio-ecru-iota-48.vercel.app/
 
 
 **Key Notes:**
