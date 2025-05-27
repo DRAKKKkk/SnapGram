@@ -40,7 +40,7 @@ SnapGram is a full-featured social media application built with modern web techn
 ### Installation
 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/snapgram.git
+git clone https://github.com/DRAKKKkk/SnapGram.git
 cd snapgram
 
 npm install
